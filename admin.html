@@ -33,6 +33,28 @@
             border-radius: 10px;
             margin-bottom: 30px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
         
         header h1 {
@@ -43,6 +65,27 @@
         header p {
             font-size: 1.1rem;
             opacity: 0.9;
+        }
+        
+        /* Login Screen (shown when not authenticated) */
+        .login-screen {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 50px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .login-screen.active {
+            display: block;
+        }
+        
+        .login-screen .login-icon {
+            font-size: 4rem;
+            color: #4b6cb7;
+            margin-bottom: 20px;
         }
         
         /* Admin Controls */
@@ -387,69 +430,102 @@
             .map-frame {
                 height: 300px;
             }
+            
+            .logout-btn {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-top: 15px;
+                width: 100%;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1><i class="fas fa-map-marker-alt"></i> Customer Locations Dashboard</h1>
-            <p>View and manage all customer shared locations</p>
-        </header>
+        <!-- Login Screen (shown when not authenticated) -->
+        <div class="login-screen" id="loginScreen">
+            <div class="login-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h2 style="margin-bottom: 20px; color: #182848;">Authentication Required</h2>
+            <p style="margin-bottom: 30px; color: #666; max-width: 500px; margin-left: auto; margin-right: auto;">
+                You need to be logged in to access the customer locations dashboard.
+            </p>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="window.location.href='login.html'">
+                    <i class="fas fa-sign-in-alt"></i> Go to Login Page
+                </button>
+                <button class="btn btn-secondary" onclick="window.location.href='customer.html'">
+                    <i class="fas fa-map-marker-alt"></i> Customer View
+                </button>
+            </div>
+        </div>
         
-        <div class="admin-controls">
-            <div class="stats">
-                <div class="stat-box">
-                    <div class="stat-label">Total Customers</div>
-                    <div class="stat-value" id="customerCount">0</div>
+        <!-- Dashboard Content (shown when authenticated) -->
+        <div id="dashboardContent" style="display: none;">
+            <header>
+                <h1><i class="fas fa-map-marker-alt"></i> Customer Locations Dashboard</h1>
+                <p>View and manage all customer shared locations</p>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </header>
+            
+            <div class="admin-controls">
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-label">Total Customers</div>
+                        <div class="stat-value" id="customerCount">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Today</div>
+                        <div class="stat-value" id="todayCount">0</div>
+                    </div>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-label">Today</div>
-                    <div class="stat-value" id="todayCount">0</div>
+                
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="btn btn-success" id="exportBtn">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                    <button class="btn btn-danger" id="clearAllBtn">
+                        <i class="fas fa-trash"></i> Clear All
+                    </button>
                 </div>
             </div>
             
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button class="btn btn-primary" id="refreshBtn">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
-                <button class="btn btn-success" id="exportBtn">
-                    <i class="fas fa-download"></i> Export Data
-                </button>
-                <button class="btn btn-danger" id="clearAllBtn">
-                    <i class="fas fa-trash"></i> Clear All
-                </button>
-            </div>
-        </div>
-        
-        <div class="customers-grid" id="customersList">
-            <!-- Customer cards will be loaded here -->
-            <div class="empty-state">
-                <div class="empty-icon">
-                    <i class="fas fa-map-marked-alt"></i>
+            <div class="customers-grid" id="customersList">
+                <!-- Customer cards will be loaded here -->
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3>No Customer Locations Yet</h3>
+                    <p>When customers share their locations, they will appear here.</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem;">
+                        Share the customer link: <code id="customerLink"></code>
+                    </p>
                 </div>
-                <h3>No Customer Locations Yet</h3>
-                <p>When customers share their locations, they will appear here.</p>
-                <p style="margin-top: 15px; font-size: 0.9rem;">
-                    Share the customer link: <code id="customerLink"></code>
-                </p>
             </div>
-        </div>
-        
-        <!-- Map Container -->
-        <div class="map-container" id="mapContainer">
-            <div class="map-header">
-                <h3 style="margin: 0;"><i class="fas fa-map"></i> Customer Location</h3>
-                <button class="close-map" id="closeMapBtn">&times;</button>
+            
+            <!-- Map Container -->
+            <div class="map-container" id="mapContainer">
+                <div class="map-header">
+                    <h3 style="margin: 0;"><i class="fas fa-map"></i> Customer Location</h3>
+                    <button class="close-map" id="closeMapBtn">&times;</button>
+                </div>
+                <iframe class="map-frame" id="googleMap" frameborder="0" allowfullscreen></iframe>
             </div>
-            <iframe class="map-frame" id="googleMap" frameborder="0" allowfullscreen></iframe>
+            
+            <footer>
+                <p>Customer Locations Dashboard | Uses JSONBin.io for data storage</p>
+                <p>Logged in as: <span id="loggedInEmail"></span> | Auto-refreshes every 30 seconds</p>
+            </footer>
         </div>
-        
-        <footer>
-            <p>Customer Locations Dashboard | Uses JSONBin.io for data storage</p>
-            <p>Auto-refreshes every 30 seconds to show new customer locations</p>
-        </footer>
     </div>
     
     <!-- Notification -->
@@ -457,7 +533,7 @@
 
     <script>
         // ==============================================
-        // YOUR JSONBin.io CREDENTIALS
+        // YOUR JSONBin.io CREDENTIALS - SAME BIN
         // ==============================================
         const BIN_ID = '6960140d43b1c97be92293b4'; // Your Bin ID
         const API_KEY = '$2a$10$PdqXWWRKGJ0qoA1pKNRHHOT2lXGikA/vl40fftBIueYWTxUwTj4PW'; // Your X-Master-Key
@@ -465,6 +541,8 @@
         // ==============================================
         
         // DOM Elements
+        const loginScreen = document.getElementById('loginScreen');
+        const dashboardContent = document.getElementById('dashboardContent');
         const customerCount = document.getElementById('customerCount');
         const todayCount = document.getElementById('todayCount');
         const refreshBtn = document.getElementById('refreshBtn');
@@ -475,23 +553,20 @@
         const mapContainer = document.getElementById('mapContainer');
         const googleMap = document.getElementById('googleMap');
         const closeMapBtn = document.getElementById('closeMapBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const loggedInEmail = document.getElementById('loggedInEmail');
         const notification = document.getElementById('notification');
         
         // State
         let customers = [];
         let refreshInterval = null;
+        let isAuthenticated = false;
+        let adminEmail = '';
         
         // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
-            loadCustomers();
-            
-            // Set customer link display
-            const customerPageUrl = window.location.origin + '/customer.html';
-            customerLink.textContent = customerPageUrl;
-            
-            // Auto-refresh every 30 seconds
-            refreshInterval = setInterval(loadCustomers, 30000);
+            checkAuthentication();
         });
         
         // Set up event listeners
@@ -500,10 +575,79 @@
             exportBtn.addEventListener('click', exportData);
             clearAllBtn.addEventListener('click', clearAllCustomers);
             closeMapBtn.addEventListener('click', closeMap);
+            logoutBtn.addEventListener('click', performLogout);
+        }
+        
+        // Check authentication status
+        function checkAuthentication() {
+            const authToken = localStorage.getItem('adminAuthToken');
+            const authTime = localStorage.getItem('adminAuthTime');
+            
+            if (authToken && authTime) {
+                // Check if token is still valid (24 hours)
+                const currentTime = new Date().getTime();
+                const authAge = currentTime - parseInt(authTime);
+                const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+                
+                if (authAge < maxAge) {
+                    // Token is valid, show dashboard
+                    isAuthenticated = true;
+                    
+                    // Try to get admin email from localStorage or set default
+                    adminEmail = localStorage.getItem('adminEmail') || 'Administrator';
+                    loggedInEmail.textContent = adminEmail;
+                    
+                    // Show dashboard
+                    loginScreen.style.display = 'none';
+                    dashboardContent.style.display = 'block';
+                    
+                    // Load customers and start auto-refresh
+                    loadCustomers();
+                    startAutoRefresh();
+                    
+                    // Set customer link
+                    const customerPageUrl = window.location.origin + '/customer.html';
+                    customerLink.textContent = customerPageUrl;
+                    
+                    return;
+                } else {
+                    // Token expired, clear it
+                    localStorage.removeItem('adminAuthToken');
+                    localStorage.removeItem('adminAuthTime');
+                    localStorage.removeItem('adminEmail');
+                }
+            }
+            
+            // Not authenticated, show login screen
+            isAuthenticated = false;
+            loginScreen.classList.add('active');
+            dashboardContent.style.display = 'none';
+            
+            // Stop auto-refresh if running
+            stopAutoRefresh();
+        }
+        
+        // Start auto-refresh
+        function startAutoRefresh() {
+            // Stop any existing interval
+            stopAutoRefresh();
+            
+            // Start new interval (every 30 seconds)
+            refreshInterval = setInterval(loadCustomers, 30000);
+        }
+        
+        // Stop auto-refresh
+        function stopAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
         }
         
         // Load customers from database
         async function loadCustomers() {
+            if (!isAuthenticated) return;
+            
             try {
                 const response = await fetch(API_URL + '/latest', {
                     headers: {
@@ -536,11 +680,6 @@
                     
                     // Render customers
                     renderCustomers();
-                    
-                    // Show notification only if not auto-refresh
-                    if (!refreshInterval || refreshInterval._idleTimeout > 0) {
-                        showNotification(`Loaded ${customers.length} customer(s)`, 'success');
-                    }
                 } else {
                     customers = [];
                     renderCustomers();
@@ -558,13 +697,13 @@
                     customers = [];
                     renderCustomers();
                 }
-                
-                showNotification('Using local storage (cloud unavailable)', 'info');
             }
         }
         
         // Render customers list
         function renderCustomers() {
+            if (!isAuthenticated) return;
+            
             customerCount.textContent = customers.length;
             
             // Calculate today's count
@@ -670,8 +809,10 @@
             }
         }
         
-        // Show location on Google Maps (FREE - no API key)
+        // Show location on Google Maps
         function showLocationOnMap(lat, lng, customerName) {
+            if (!isAuthenticated) return;
+            
             // Show map container
             mapContainer.classList.add('active');
             
@@ -691,6 +832,8 @@
         
         // Get directions to customer location
         function getDirections(lat, lng) {
+            if (!isAuthenticated) return;
+            
             // Try to get user's current location for better directions
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -723,6 +866,8 @@
         
         // Delete a customer
         async function deleteCustomer(id) {
+            if (!isAuthenticated) return;
+            
             if (!confirm('Are you sure you want to remove this customer location?')) {
                 return;
             }
@@ -784,6 +929,8 @@
         
         // Export data as JSON file
         function exportData() {
+            if (!isAuthenticated) return;
+            
             if (customers.length === 0) {
                 showNotification('No data to export', 'info');
                 return;
@@ -804,6 +951,8 @@
         
         // Clear all customers
         async function clearAllCustomers() {
+            if (!isAuthenticated) return;
+            
             if (customers.length === 0) {
                 showNotification('No customer locations to clear', 'info');
                 return;
@@ -844,6 +993,20 @@
             renderCustomers();
         }
         
+        // Perform logout
+        function performLogout() {
+            // Clear authentication data
+            localStorage.removeItem('adminAuthToken');
+            localStorage.removeItem('adminAuthTime');
+            localStorage.removeItem('adminEmail');
+            
+            // Stop auto-refresh
+            stopAutoRefresh();
+            
+            // Redirect to login page
+            window.location.href = 'login.html';
+        }
+        
         // Show notification
         function showNotification(message, type) {
             notification.textContent = message;
@@ -860,9 +1023,8 @@
         window.deleteCustomer = deleteCustomer;
         
         // Log app info
-        console.log('Admin Dashboard');
-        console.log('Customer page: ', window.location.origin + '/customer.html');
-        console.log('Dashboard auto-refreshes every 30 seconds');
+        console.log('Protected Admin Dashboard');
+        console.log('Authentication required to access dashboard');
     </script>
 </body>
 </html>
