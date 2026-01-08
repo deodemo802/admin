@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Customer Location Finder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            max-width: 450px;
+            width: 100%;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, #182848 0%, #4b6cb7 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login-header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .login-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .login-form {
+            background: white;
+            border-radius: 0 0 10px 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .login-icon {
+            font-size: 3.5rem;
+            color: #4b6cb7;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: #4b6cb7;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(75, 108, 183, 0.2);
+        }
+        
+        .required {
+            color: #ea4335;
+        }
+        
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn-primary {
+            background-color: #4b6cb7;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a5699;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: #f1f5f9;
+            color: #444;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+        }
+        
+        .login-links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .login-links a {
+            color: #4b6cb7;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .login-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            max-width: 400px;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .success {
+            background-color: #34a853;
+        }
+        
+        .error {
+            background-color: #ea4335;
+        }
+        
+        .info {
+            background-color: #4285f4;
+        }
+        
+        @media (max-width: 500px) {
+            .login-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .login-form {
+                padding: 20px;
+            }
+            
+            .login-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1><i class="fas fa-lock"></i> Admin Login</h1>
+            <p>Secure access to customer locations dashboard</p>
+        </div>
+        
+        <div class="login-form">
+            <div class="login-icon">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            
+            <h2 style="margin-bottom: 20px; color: #182848; text-align: center;">Dashboard Access</h2>
+            <p style="margin-bottom: 30px; color: #666; text-align: center;">
+                Please enter your admin credentials to access the customer locations dashboard.
+            </p>
+            
+            <div class="form-group">
+                <label for="email">Admin Email <span class="required">*</span></label>
+                <input type="email" id="email" placeholder="Enter admin email" required value="deodemo802@gmail.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <input type="password" id="password" placeholder="Enter admin password" required>
+            </div>
+            
+            <button class="btn btn-primary" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i> Login to Dashboard
+            </button>
+            
+            <div class="login-links">
+                <p>Customer? <a href="customer.html">Share your location here</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // ==============================================
+        // YOUR JSONBin.io CREDENTIALS - SAME BIN
+        // ==============================================
+        const BIN_ID = '6960140d43b1c97be92293b4'; // Your Bin ID
+        const API_KEY = '$2a$10$PdqXWWRKGJ0qoA1pKNRHHOT2lXGikA/vl40fftBIueYWTxUwTj4PW'; // Your X-Master-Key
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        // ==============================================
+        
+        // DOM Elements
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const notification = document.getElementById('notification');
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            
+            // Focus on password input
+            passwordInput.focus();
+            
+            // Check if already logged in
+            checkAuthStatus();
+        });
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            loginBtn.addEventListener('click', performLogin);
+            
+            // Check for Enter key
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performLogin();
+                }
+            });
+        }
+        
+        // Check if user is already authenticated
+        function checkAuthStatus() {
+            const authToken = localStorage.getItem('adminAuthToken');
+            const authTime = localStorage.getItem('adminAuthTime');
+            
+            if (authToken && authTime) {
+                // Check if token is still valid (24 hours)
+                const currentTime = new Date().getTime();
+                const authAge = currentTime - parseInt(authTime);
+                const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+                
+                if (authAge < maxAge) {
+                    // Token is still valid, redirect to admin dashboard
+                    window.location.href = 'admin.html';
+                } else {
+                    // Token expired, clear it
+                    localStorage.removeItem('adminAuthToken');
+                    localStorage.removeItem('adminAuthTime');
+                }
+            }
+        }
+        
+        // Perform login authentication
+        async function performLogin() {
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            // Basic validation
+            if (!email || !password) {
+                showNotification('Please enter both email and password', 'error');
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showNotification('Please enter a valid email address', 'error');
+                emailInput.focus();
+                return;
+            }
+            
+            // Update button state
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+            
+            try {
+                // Load admin credentials from JSONBin.io
+                const adminCredentials = await loadAdminCredentials();
+                
+                // Verify credentials
+                if (adminCredentials.email === email && adminCredentials.password === password) {
+                    // Create auth token (simple hash of email + timestamp)
+                    const authToken = btoa(`${email}:${Date.now()}`).replace(/=/g, '');
+                    const authTime = new Date().getTime();
+                    
+                    // Store auth token and time
+                    localStorage.setItem('adminAuthToken', authToken);
+                    localStorage.setItem('adminAuthTime', authTime.toString());
+                    
+                    // Show success and redirect
+                    showNotification('Login successful! Redirecting to dashboard...', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'admin.html';
+                    }, 1500);
+                    
+                } else {
+                    // Invalid credentials
+                    showNotification('Invalid email or password', 'error');
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Dashboard';
+                    passwordInput.focus();
+                    passwordInput.select();
+                }
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                showNotification('Authentication failed. Please try again.', 'error');
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Dashboard';
+            }
+        }
+        
+        // Load admin credentials from JSONBin.io
+        async function loadAdminCredentials() {
+            try {
+                const response = await fetch(API_URL + '/latest', {
+                    headers: {
+                        'X-Master-Key': API_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load credentials');
+                }
+                
+                const data = await response.json();
+                
+                // Check if admin credentials exist in the data
+                if (data.record && data.record.admin) {
+                    return data.record.admin;
+                } else {
+                    // If no admin credentials exist, create default ones
+                    const defaultAdmin = {
+                        email: 'deodemo802@gmail.com',
+                        password: 'deXle12@@'
+                    };
+                    
+                    // Try to save default credentials
+                    await saveDefaultAdminCredentials(defaultAdmin);
+                    return defaultAdmin;
+                }
+                
+            } catch (error) {
+                console.error('Error loading admin credentials:', error);
+                throw error;
+            }
+        }
+        
+        // Save default admin credentials to JSONBin.io
+        async function saveDefaultAdminCredentials(adminCredentials) {
+            try {
+                // First, load existing data
+                const response = await fetch(API_URL + '/latest', {
+                    headers: {
+                        'X-Master-Key': API_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                let existingData = { customers: [] };
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.record) {
+                        existingData = data.record;
+                    }
+                }
+                
+                // Add admin credentials to the data
+                existingData.admin = adminCredentials;
+                
+                // Save updated data
+                const saveResponse = await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'X-Master-Key': API_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(existingData)
+                });
+                
+                if (!saveResponse.ok) {
+                    throw new Error('Failed to save admin credentials');
+                }
+                
+                console.log('Default admin credentials saved successfully');
+                return true;
+            } catch (error) {
+                console.error('Error saving admin credentials:', error);
+                throw error;
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Log app info
+        console.log('Admin Login Page');
+        console.log('Credentials stored securely in JSONBin.io');
+    </script>
+</body>
+</html>
