@@ -454,10 +454,10 @@
                 You need to be logged in to access the customer locations dashboard.
             </p>
             <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                <button class="btn btn-primary" onclick="window.location.href='login.html'">
+                <button class="btn btn-primary" onclick="window.location.href='index.html'">
                     <i class="fas fa-sign-in-alt"></i> Go to Login Page
                 </button>
-                <button class="btn btn-secondary" onclick="window.location.href='customer.html'">
+                <button class="btn btn-secondary" onclick="window.location.href='https://deodemo802.github.io/customer'">
                     <i class="fas fa-map-marker-alt"></i> Customer View
                 </button>
             </div>
@@ -606,7 +606,7 @@
                     startAutoRefresh();
                     
                     // Set customer link
-                    const customerPageUrl = window.location.origin + '/customer.html';
+                    const customerPageUrl = window.location.origin + '/https://deodemo802.github.io/customer';
                     customerLink.textContent = customerPageUrl;
                     
                     return;
@@ -723,7 +723,7 @@
                         <h3>No Customer Locations Yet</h3>
                         <p>When customers share their locations, they will appear here.</p>
                         <p style="margin-top: 15px; font-size: 0.9rem;">
-                            Share the customer link: <code>${window.location.origin}/customer.html</code>
+                            Share the customer link: <code>${window.location.origin}/https://deodemo802.github.io/customer</code>
                         </p>
                     </div>
                 `;
@@ -1004,7 +1004,7 @@
             stopAutoRefresh();
             
             // Redirect to login page
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
         
         // Show notification
