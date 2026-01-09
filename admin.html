@@ -457,9 +457,9 @@
                 <button class="btn btn-primary" onclick="window.location.href='index.html'">
                     <i class="fas fa-sign-in-alt"></i> Go to Login Page
                 </button>
-                <button class="btn btn-secondary" onclick="window.location.href='https://deodemo802.github.io/customer'">
-                    <i class="fas fa-map-marker-alt"></i> Customer View
-                </button>
+                <button class="btn btn-secondary" onclick="window.open('https://deodemo802.github.io/customer', '_blank')">
+    <i class="fas fa-map-marker-alt"></i> Customer View
+</button>
             </div>
         </div>
         
@@ -604,10 +604,10 @@
                     // Load customers and start auto-refresh
                     loadCustomers();
                     startAutoRefresh();
-                    
-                    // Set customer link
-                    const customerPageUrl = window.location.origin + '/https://deodemo802.github.io/customer';
-                    customerLink.textContent = customerPageUrl;
+
+                    // Set customer link correctly
+const customerPageUrl = 'https://deodemo802.github.io/customer';
+customerLink.textContent = customerPageUrl;
                     
                     return;
                 } else {
@@ -715,18 +715,18 @@
             todayCount.textContent = todayCustomers.length;
             
             if (customers.length === 0) {
-                customersList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">
-                            <i class="fas fa-map-marked-alt"></i>
-                        </div>
-                        <h3>No Customer Locations Yet</h3>
-                        <p>When customers share their locations, they will appear here.</p>
-                        <p style="margin-top: 15px; font-size: 0.9rem;">
-                            Share the customer link: <code>${window.location.origin}/https://deodemo802.github.io/customer</code>
-                        </p>
-                    </div>
-                `;
+           customersList.innerHTML = `
+    <div class="empty-state">
+        <div class="empty-icon">
+            <i class="fas fa-map-marked-alt"></i>
+        </div>
+        <h3>No Customer Locations Yet</h3>
+        <p>When customers share their locations, they will appear here.</p>
+        <p style="margin-top: 15px; font-size: 0.9rem;">
+            Share the customer link: <code>https://deodemo802.github.io/customer</code>
+        </p>
+    </div>
+`;
                 return;
             }
             
